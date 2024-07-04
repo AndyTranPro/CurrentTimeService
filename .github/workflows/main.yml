@@ -15,11 +15,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -36,9 +31,6 @@ jobs:
 
       - name: Publish the project
         run: dotnet publish ./CurrentTimeService/CurrentTimeService.csproj --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
-
-      - name: Verify Publish Directory
-        run: ls -la ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
