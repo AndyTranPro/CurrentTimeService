@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
       - uses: actions/checkout@v3
 
       - name: Setup .NET
@@ -31,10 +36,14 @@ jobs:
       - name: Publish
         run: dotnet publish ./CurrentTimeService/CurrentTimeService.csproj --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
+      - name: Verify Publish Directory
+        run: ls -la ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
       - name: Deployment
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
 
